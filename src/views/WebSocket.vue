@@ -60,12 +60,11 @@
               </tr>
             </thead>
             <tbody>
-              {{received_messages}}
               <tr
                 v-for="item in received_messages"
                 :key="item"
               >
-                <td>{{ item }}</td>
+                <td>{{ item.message }}</td>
               </tr>
             </tbody>
           </table>
@@ -99,6 +98,7 @@ export default {
           senderUserId: 4,
           receiverUserId: receiverUserId,
         };
+        console.log("aaaaaaaaaaaaaaa");
         console.log(JSON.stringify(body));
         // /appを付けて直接コントローラを呼び出す/
         this.stompClient.send(`/app/users/${receiverUserId}`, JSON.stringify(body), {});
@@ -117,7 +117,7 @@ export default {
           this.stompClient.subscribe(`/queue/users/${receiverUserId}`, tick => {
             console.log("tick",tick);
             console.log(tick.body)
-            this.received_messages.push(JSON.parse(tick).content);
+            this.received_messages.push(JSON.parse(tick.body));
           });
         },
         error => {
